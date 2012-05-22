@@ -65,11 +65,14 @@
 									<div class="postbody">${pm.post.text}
                                          qwer
                                         <#if hasAttachments && (canDownloadAttachments || attachmentsEnabled)>
-                                            dakka
 
-                                            <#assign attachments = am.getAttachments(post.id, post.forumId)/>
+                                            <div>
+                                                <#assign attachments = am.getPMAttachments(pm.id, 0)/>
 
-                                            <#include "post_show_attachments_inc.htm"/>
+                                                <#include "post_show_attachments_inc.htm"/>
+                                            </div>
+
+
                                         </#if>
 									<#if (pm.fromUser.attachSignatureEnabled && pm.fromUser.signature?exists && pm.fromUser.signature?length > 0 && pm.post.isSignatureEnabled())>
 									<hr />

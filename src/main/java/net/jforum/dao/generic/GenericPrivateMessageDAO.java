@@ -257,7 +257,7 @@ public class GenericPrivateMessageDAO extends AutoKeys implements net.jforum.dao
         pm.setType(rs.getInt("privmsgs_type"));
         post.setTime(new Date(rs.getTimestamp("privmsgs_date").getTime()));
         post.setSubject(rs.getString("privmsgs_subject"));
-//        post.hasAttachments(rs.getInt("attach") > 0);
+        pm.setHasAttachments(rs.getInt("privmsgs_attach") > 0);
 
         SimpleDateFormat df = new SimpleDateFormat(SystemGlobals.getValue(ConfigKeys.DATE_TIME_FORMAT), Locale.getDefault());
         pm.setFormattedDate(df.format(post.getTime()));

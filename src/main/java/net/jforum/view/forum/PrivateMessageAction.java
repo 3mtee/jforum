@@ -56,7 +56,10 @@ import net.jforum.entities.PrivateMessage;
 import net.jforum.entities.PrivateMessageType;
 import net.jforum.entities.User;
 import net.jforum.entities.UserSession;
+import net.jforum.repository.SecurityRepository;
 import net.jforum.repository.SmiliesRepository;
+import net.jforum.security.PermissionControl;
+import net.jforum.security.SecurityConstants;
 import net.jforum.util.I18n;
 import net.jforum.util.SafeHtml;
 import net.jforum.util.concurrent.Executor;
@@ -329,10 +332,14 @@ public class PrivateMessageAction extends Command {
             }
 
             User user = pm.getFromUser();
+            PermissionControl pc = SecurityRepository.get(us.getUserId());
             ViewCommon.prepareUserSignature(user);
 
             this.context.put("pm", pm);
-            this.context.put("hasAttachments", post.hasAttachments());
+            this.context.put("am", new AttachmentCommon(this.request, 0));
+            this.context.put("hasAttachments", pm.hasAttachments());
+            this.context.put("thumbShowBox", SystemGlobals.getBoolValue(ConfigKeys.ATTACHMENTS_IMAGES_THUMB_BOX_SHOW));
+            this.context.put("canDownloadAttachments", pc.canAccess(SecurityConstants.PERM_ATTACHMENTS_DOWNLOAD));
             this.context.put("attachmentsEnabled", true);
             this.setTemplateName(TemplateKeys.PM_READ);
         } else {
