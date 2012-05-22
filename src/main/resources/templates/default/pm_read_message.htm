@@ -63,6 +63,14 @@
 							<tr>
 								<td class="row1" valign="top" colspan="3">
 									<div class="postbody">${pm.post.text}
+                                         qwer
+                                        <#if hasAttachments && (canDownloadAttachments || attachmentsEnabled)>
+                                            dakka
+
+                                            <#assign attachments = am.getAttachments(post.id, post.forumId)/>
+
+                                            <#include "post_show_attachments_inc.htm"/>
+                                        </#if>
 									<#if (pm.fromUser.attachSignatureEnabled && pm.fromUser.signature?exists && pm.fromUser.signature?length > 0 && pm.post.isSignatureEnabled())>
 									<hr />
 									<span class="gensmall">${pm.fromUser.signature}</span>

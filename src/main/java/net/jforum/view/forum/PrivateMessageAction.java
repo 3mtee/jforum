@@ -65,6 +65,7 @@ import net.jforum.util.mail.PrivateMessageSpammer;
 import net.jforum.util.preferences.ConfigKeys;
 import net.jforum.util.preferences.SystemGlobals;
 import net.jforum.util.preferences.TemplateKeys;
+import net.jforum.view.forum.common.AttachmentCommon;
 import net.jforum.view.forum.common.PostCommon;
 import net.jforum.view.forum.common.ViewCommon;
 
@@ -161,9 +162,9 @@ public class PrivateMessageAction extends Command {
         this.context.put("moduleName", "pm");
         this.context.put("action", "sendSave");
         this.context.put("htmlAllowed", true);
-        this.context.put("attachmentsEnabled", false);
+        this.context.put("attachmentsEnabled", true);
         this.context.put("maxAttachments", SystemGlobals.getValue(ConfigKeys.ATTACHMENTS_MAX_POST));
-        this.context.put("maxAttachmentsSize", Integer.valueOf(0));
+        this.context.put("maxAttachmentsSize", 1);
         this.context.put("moderationLoggingEnabled", false);
         this.context.put("smilies", SmiliesRepository.getSmilies());
     }
@@ -181,7 +182,6 @@ public class PrivateMessageAction extends Command {
 
         List<User> users = null;
 
-
         // If we don't have a user id, then probably the user
         // inserted the username by hand in the form's field
         if (toUserIdStr == null || "".equals(toUserIdStr.trim())) {
@@ -195,8 +195,7 @@ public class PrivateMessageAction extends Command {
             if (userNames.isEmpty()) {
                 users = userDao.findByName(toUsername, true);
             } else {
-                List<User> list = userDao.findByNames(userNames, true);
-                System.out.println(list);
+                users = userDao.findByNames(userNames, true);
             }
         } else {
             int toUserId = Integer.parseInt(toUserIdStr);
@@ -212,14 +211,13 @@ public class PrivateMessageAction extends Command {
             return;
         }
 
-
-
         boolean preview = "1".equals(this.request.getParameter("preview"));
 
+        final Post post = PostCommon.fillPostFromRequest();
         if (preview) {
 
             PrivateMessage pm = new PrivateMessage();
-            pm.setPost(PostCommon.fillPostFromRequest());
+            pm.setPost(post);
 
             // Sender
             User fromUser = new User();
@@ -238,9 +236,12 @@ public class PrivateMessageAction extends Command {
 
             this.send();
         } else {
+            AttachmentCommon attachments = new AttachmentCommon(this.request, 0);
+            attachments.preProcess();
+
             for (User user : users) {
                 PrivateMessage pm = new PrivateMessage();
-                pm.setPost(PostCommon.fillPostFromRequest());
+                pm.setPost(post);
 
                 // Sender
                 User fromUser = new User();
@@ -249,8 +250,9 @@ public class PrivateMessageAction extends Command {
 
                 pm.setToUser(user);
 
-
                 DataAccessDriver.getInstance().newPrivateMessageDAO().send(pm);
+                pm.setHasAttachments(!attachments.getPMAttachments(pm.getId(), 0).isEmpty());
+
 
                 // If the target user if in the forum, then increments its
                 // private message count
@@ -264,17 +266,14 @@ public class PrivateMessageAction extends Command {
                 if (user.getEmail() != null && user.getEmail().trim().length() > 0 && SystemGlobals.getBoolValue(ConfigKeys.MAIL_NOTIFY_ANSWERS)) {
                     Executor.execute(new EmailSenderTask(new PrivateMessageSpammer(user)));
                 }
+                attachments.insertAttachments(pm.getId());
             }
-
 
             this.setTemplateName(TemplateKeys.PM_SENDSAVE);
             this.context.put("message", I18n.getMessage("PrivateMessage.messageSent",
                     new String[]{this.request.getContextPath()
                             + "/pm/inbox"
                             + SystemGlobals.getValue(ConfigKeys.SERVLET_EXTENSION)}));
-
-
-
 
         }
     }
@@ -314,7 +313,8 @@ public class PrivateMessageAction extends Command {
         int userId = us.getUserId();
 
         if (pm.getToUser().getId() == userId || pm.getFromUser().getId() == userId) {
-            pm.getPost().setText(PostCommon.preparePostForDisplay(pm.getPost()).getText());
+            final Post post = pm.getPost();
+            post.setText(PostCommon.preparePostForDisplay(post).getText());
 
             // Update the message status, if needed
             if (pm.getType() == PrivateMessageType.NEW) {
@@ -332,6 +332,8 @@ public class PrivateMessageAction extends Command {
             ViewCommon.prepareUserSignature(user);
 
             this.context.put("pm", pm);
+            this.context.put("hasAttachments", post.hasAttachments());
+            this.context.put("attachmentsEnabled", true);
             this.setTemplateName(TemplateKeys.PM_READ);
         } else {
             this.setTemplateName(TemplateKeys.PM_READ_DENIED);

@@ -251,6 +251,7 @@ CREATE TABLE jforum_privmsgs (
 	privmsgs_enable_html tinyint DEFAULT (0) NOT NULL,
 	privmsgs_enable_smilies tinyint DEFAULT (1) NOT NULL,
 	privmsgs_attach_sig tinyint DEFAULT (1) NOT NULL 
+	privmsgs_attach tinyint DEFAULT (0) NOT NULL
 );
 
 CREATE TABLE jforum_privmsgs_text (

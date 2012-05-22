@@ -162,6 +162,7 @@ CREATE TABLE jforum_privmsgs (
   privmsgs_enable_html TINYINT(1) NOT NULL DEFAULT 0,
   privmsgs_enable_smilies TINYINT(1) NOT NULL DEFAULT 1,
   privmsgs_attach_sig TINYINT(1) NOT NULL DEFAULT 1,
+  privmsgs_attach TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (privmsgs_id)
 ) ENGINE=InnoDB;
 

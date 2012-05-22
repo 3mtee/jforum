@@ -62,7 +62,7 @@ public interface AttachmentDAO
 	 * 
 	 * @param attachment The attachment to add
 	 */
-	void addAttachment(Attachment attachment);
+	void addAttachment(Attachment attachment, Class classToAttachTo);
 	
 	/**
 	 * Updates an attachment.
@@ -88,7 +88,9 @@ public interface AttachmentDAO
 	 * instance.
 	 */
 	List<Attachment> selectAttachments(int postId);
-	
+
+    List<Attachment> selectPMAttachments(int messageId);
+
 	/**
 	 * Gets an attachment by its id
 	 * 

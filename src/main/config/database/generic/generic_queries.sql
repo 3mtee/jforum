@@ -648,6 +648,7 @@ AttachmentModel.addAttachmentInfo = INSERT INTO jforum_attach_desc (attach_id, p
 	mimetype, filesize, upload_time, thumb, extension_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 	
 AttachmentModel.updatePost = UPDATE jforum_posts SET attach = ? WHERE post_id = ?
+AttachmentModel.updatePMAttach = UPDATE jforum_privmsgs SET privmsgs_attach = ? WHERE privmsgs_id = ?
 
 AttachmentModel.selectExtensions = SELECT extension_id, extension_group_id, extension, description, upload_icon, allow, '' AS group_icon FROM jforum_extensions ORDER BY extension
 
@@ -667,7 +668,14 @@ AttachmentModel.selectAttachments = SELECT a.attach_id, a.user_id, a.post_id, a.
 	FROM jforum_attach a, jforum_attach_desc d \
 	WHERE a.post_id = ? \
 	AND a.attach_id = d.attach_id
-	
+
+
+AttachmentModel.selectPMAttachments = SELECT a.attach_id, a.user_id, a.post_id, a.privmsgs_id, d.mimetype, d.physical_filename, d.real_filename, \
+	d.download_count, d.description, d.filesize, d.upload_time, d.extension_id \
+	FROM jforum_attach a, jforum_attach_desc d \
+	WHERE a.privmsgs_id = ? \
+	AND a.attach_id = d.attach_id
+
 AttachmentModel.selectAttachmentById = SELECT a.attach_id, a.user_id, a.post_id, a.privmsgs_id, d.mimetype, d.physical_filename, d.real_filename, \
 	d.download_count, d.description, d.filesize, d.upload_time, d.extension_id \
 	FROM jforum_attach a, jforum_attach_desc d \

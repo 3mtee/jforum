@@ -164,6 +164,7 @@ CREATE TABLE jforum_privmsgs (
   privmsgs_enable_html int default '0' NOT NULL,
   privmsgs_enable_smilies int default '1' NOT NULL,
   privmsgs_attach_sig int default '1' NOT NULL,
+  privmsgs_attach int default 0,
   PRIMARY KEY  (privmsgs_id)
 ) ;
 
