@@ -522,7 +522,7 @@ PrivateMessagesModel.isDeleteAllowed = SELECT 1 FROM jforum_privmsgs WHERE privm
 PrivateMessageModel.delete = DELETE FROM jforum_privmsgs WHERE privmsgs_id = ?	
 PrivateMessagesModel.deleteText = DELETE FROM jforum_privmsgs_text WHERE privmsgs_id = ?
 
-PrivateMessageModel.baseCount = SELECT COUNT(pm.privmsgs_id) \
+PrivateMessageModel.baseCount = SELECT COUNT(pm.privmsgs_id) as mCount \
 	FROM jforum_privmsgs pm, jforum_users u \
 	#FILTER# \
 	ORDER BY pm.privmsgs_date DESC

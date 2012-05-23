@@ -30,9 +30,9 @@ public class PrivateMessageREST extends RESTCommand {
 
             final User user = userDAO.findByEmail(email);
 
-            final List<PrivateMessage> privateMessages = privateMessageDAO.selectFromInbox(user);
+            final int messagesCount = privateMessageDAO.inboxTotalCount(user);
             this.setTemplateName(TemplateKeys.API_MESSAGES_COUNT);
-            this.context.put("messagesCount", privateMessages.size());
+            this.context.put("messagesCount", messagesCount);
 
         } catch (Exception e) {
             this.setTemplateName(TemplateKeys.API_ERROR);

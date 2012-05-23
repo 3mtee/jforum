@@ -337,22 +337,13 @@ public class GenericPrivateMessageDAO extends AutoKeys implements net.jforum.dao
                 pstmt = JForumExecutionContext.getConnection().prepareStatement(query);
                 pstmt.setInt(1, user.getId());
 
-                List<PrivateMessage> pmList = new ArrayList<PrivateMessage>();
 
                 rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    PrivateMessage pm = this.getPm(rs, false);
-
-                    User fromUser = new User();
-                    fromUser.setId(rs.getInt("user_id"));
-                    fromUser.setUsername(rs.getString("username"));
-
-                    pm.setFromUser(fromUser);
-
-                    pmList.add(pm);
+                if (rs.next()) {
+                    return rs.getInt("mCount");
                 }
 
-                return pmList.size();
+                return 0;
             } catch (SQLException e) {
                 throw new DatabaseException(e);
             } finally {
