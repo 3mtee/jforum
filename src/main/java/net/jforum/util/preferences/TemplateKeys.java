@@ -194,7 +194,8 @@ public final class TemplateKeys
 	public static final String API_USER_LIST = "api.user.list";
 	public static final String API_USER_INSERT = "api.user.insert";
 	public static final String API_ERROR = "api.error";
-	public static final String API_POST_INSERT = "api.post.insert";	
+	public static final String API_POST_INSERT = "api.post.insert";
+    public static final String API_MESSAGES_COUNT = "api.pMessage.count";
 	public static final String AGREEMENT_LIST = "agreement.list";
 	public static final String ACTIVATE_ACCOUNT_MANUAL = "activate.account.manual";
 	

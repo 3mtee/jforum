@@ -105,4 +105,6 @@ public interface PrivateMessageDAO
 	 * @return The privMsg contents
 	 */
 	PrivateMessage selectById(PrivateMessage privMsg) ;
+
+    int inboxTotalCount(User user) ;
 }

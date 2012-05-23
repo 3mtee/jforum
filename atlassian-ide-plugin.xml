@@ -1,5 +1,6 @@
 <atlassian-ide-plugin>
   <project-configuration>
     <servers />
+    <default-jira-server>5f1001ad-10fd-4fc8-ae31-619ac32d4972</default-jira-server>
   </project-configuration>
 </atlassian-ide-plugin>
