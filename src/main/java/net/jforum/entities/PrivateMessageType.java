@@ -55,5 +55,9 @@ public final class PrivateMessageType
 	public static final int SENT = 2;
 	public static final int SAVED_IN = 3;
 	public static final int SAVED_OUT = 4;
-	public static final int UNREAD = 5;	
+	public static final int UNREAD = 5;
+
+    public static final String INBOX_UNREAD = "new";
+    public static final String INBOX_TOTAL = "all";
+
 }

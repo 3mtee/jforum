@@ -4,6 +4,7 @@ import freemarker.template.SimpleHash;
 import freemarker.template.Template;
 import net.jforum.JForumExecutionContext;
 import net.jforum.SessionFacade;
+import net.jforum.api.rest.RESTCommand;
 import net.jforum.context.RequestContext;
 import net.jforum.context.ResponseContext;
 import net.jforum.dao.DataAccessDriver;
@@ -11,6 +12,7 @@ import net.jforum.dao.PrivateMessageDAO;
 import net.jforum.dao.UserDAO;
 import net.jforum.entities.Post;
 import net.jforum.entities.PrivateMessage;
+import net.jforum.entities.PrivateMessageType;
 import net.jforum.entities.User;
 import net.jforum.entities.UserSession;
 import net.jforum.util.I18n;
@@ -37,34 +39,19 @@ public class PrivateMessageREST extends RESTCommand {
             this.authenticate();
 
             final String email = this.requiredRequestParameter("email");
+            final String messageType = this.requiredRequestParameter("messageType");
             final DataAccessDriver dataAccessDriver = DataAccessDriver.getInstance();
             final UserDAO userDAO = dataAccessDriver.newUserDAO();
             final PrivateMessageDAO privateMessageDAO = dataAccessDriver.newPrivateMessageDAO();
 
             final User user = userDAO.findByEmail(email);
 
-            final int messagesCount = privateMessageDAO.inboxTotalCount(user);
-            this.setTemplateName(TemplateKeys.API_MESSAGES_COUNT);
-            this.context.put("messagesCount", messagesCount);
-
-        } catch (Exception e) {
-            this.setTemplateName(TemplateKeys.API_ERROR);
-            this.context.put("exception", e);
-        }
-    }
-
-    public void unreadCount() {
-        try {
-            this.authenticate();
-
-            final String email = this.requiredRequestParameter("email");
-            final DataAccessDriver dataAccessDriver = DataAccessDriver.getInstance();
-            final UserDAO userDAO = dataAccessDriver.newUserDAO();
-            final PrivateMessageDAO privateMessageDAO = dataAccessDriver.newPrivateMessageDAO();
-
-            final User user = userDAO.findByEmail(email);
-
-            final int messagesCount = privateMessageDAO.inboxUnreadCount(user);
+            int messagesCount = 0;
+            if (messageType.equals(PrivateMessageType.INBOX_UNREAD)) {
+                messagesCount = privateMessageDAO.inboxUnreadCount(user);
+            } else if (messageType.equals(PrivateMessageType.INBOX_TOTAL)) {
+                messagesCount = privateMessageDAO.inboxTotalCount(user);
+            }
             this.setTemplateName(TemplateKeys.API_MESSAGES_COUNT);
             this.context.put("messagesCount", messagesCount);
 
