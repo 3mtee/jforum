@@ -328,26 +328,49 @@ public class GenericPrivateMessageDAO extends AutoKeys implements net.jforum.dao
 
     @Override
     public int inboxTotalCount(User user) {
-            String query = SystemGlobals.getSql("PrivateMessageModel.baseCount");
-            query = query.replaceAll("#FILTER#", SystemGlobals.getSql("PrivateMessageModel.inbox"));
+        String query = SystemGlobals.getSql("PrivateMessageModel.baseCount");
+        query = query.replaceAll("#FILTER#", SystemGlobals.getSql("PrivateMessageModel.inbox"));
 
-            PreparedStatement pstmt = null;
-            ResultSet rs = null;
-            try {
-                pstmt = JForumExecutionContext.getConnection().prepareStatement(query);
-                pstmt.setInt(1, user.getId());
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = JForumExecutionContext.getConnection().prepareStatement(query);
+            pstmt.setInt(1, user.getId());
 
-
-                rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    return rs.getInt("mCount");
-                }
-
-                return 0;
-            } catch (SQLException e) {
-                throw new DatabaseException(e);
-            } finally {
-                DbUtils.close(rs, pstmt);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("mCount");
             }
+
+            return 0;
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        } finally {
+            DbUtils.close(rs, pstmt);
+        }
+    }
+
+    @Override
+    public int inboxUnreadCount(User user) {
+        String query = SystemGlobals.getSql("PrivateMessageModel.baseCount");
+        query = query.replaceAll("#FILTER#", SystemGlobals.getSql("PrivateMessageModel.inboxUnread"));
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = JForumExecutionContext.getConnection().prepareStatement(query);
+            pstmt.setInt(1, user.getId());
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("mCount");
+            }
+
+            return 0;
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        } finally {
+            DbUtils.close(rs, pstmt);
+        }
     }
 }

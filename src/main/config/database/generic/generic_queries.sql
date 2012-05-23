@@ -537,6 +537,11 @@ PrivateMessageModel.inbox = WHERE privmsgs_to_userid = ? \
 	AND ( pm.privmsgs_type = 1 \
 	OR pm.privmsgs_type = 0 \
 	OR privmsgs_type = 5)
+
+PrivateMessageModel.inboxUnread = WHERE privmsgs_to_userid = ? \
+	AND u.user_id = pm.privmsgs_from_userid \
+	AND ( pm.privmsgs_type = 1 \
+	OR privmsgs_type = 5)
 	
 PrivateMessageModel.sent = WHERE privmsgs_from_userid = ? \
 	AND u.user_id = pm.privmsgs_to_userid \

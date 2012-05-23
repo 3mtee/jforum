@@ -40,6 +40,27 @@ public class PrivateMessageREST extends RESTCommand {
         }
     }
 
+    public void unreadCount() {
+        try {
+            this.authenticate();
+
+            final String email = this.requiredRequestParameter("email");
+            final DataAccessDriver dataAccessDriver = DataAccessDriver.getInstance();
+            final UserDAO userDAO = dataAccessDriver.newUserDAO();
+            final PrivateMessageDAO privateMessageDAO = dataAccessDriver.newPrivateMessageDAO();
+
+            final User user = userDAO.findByEmail(email);
+
+            final int messagesCount = privateMessageDAO.inboxUnreadCount(user);
+            this.setTemplateName(TemplateKeys.API_MESSAGES_COUNT);
+            this.context.put("messagesCount", messagesCount);
+
+        } catch (Exception e) {
+            this.setTemplateName(TemplateKeys.API_ERROR);
+            this.context.put("exception", e);
+        }
+    }
+
     public Template process(final RequestContext request, final ResponseContext response, final SimpleHash context) {
         JForumExecutionContext.setContentType("text/xml");
         return super.process(request, response, context);

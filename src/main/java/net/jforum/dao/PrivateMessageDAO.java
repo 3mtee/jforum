@@ -107,4 +107,6 @@ public interface PrivateMessageDAO
 	PrivateMessage selectById(PrivateMessage privMsg) ;
 
     int inboxTotalCount(User user) ;
+
+    int inboxUnreadCount(User user) ;
 }
