@@ -188,7 +188,7 @@ public class PrivateMessageAction extends Command {
         // If we don't have a user id, then probably the user
         // inserted the username by hand in the form's field
         if (toUserIdStr == null || "".equals(toUserIdStr.trim())) {
-            List<String> userNames = new LinkedList<>();
+            List<String> userNames = new LinkedList<String>();
             final StringTokenizer tokenizer = new StringTokenizer(toUsername, ",");
             while (tokenizer.hasMoreTokens()) {
                 final String token = tokenizer.nextToken().trim();
@@ -203,7 +203,7 @@ public class PrivateMessageAction extends Command {
         } else {
             int toUserId = Integer.parseInt(toUserIdStr);
             User toUser = userDao.selectById(toUserId);
-            users = new LinkedList<>();
+            users = new LinkedList<User>();
             users.add(toUser);
         }
 

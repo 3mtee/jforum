@@ -71,7 +71,7 @@ public class PrivateMessageREST extends RESTCommand {
 
             List<User> users = null;
 
-            List<String> userNames = new LinkedList<>();
+            List<String> userNames = new LinkedList<String>();
             final StringTokenizer tokenizer = new StringTokenizer(toUsername, ",");
             while (tokenizer.hasMoreTokens()) {
                 final String token = tokenizer.nextToken().trim();
