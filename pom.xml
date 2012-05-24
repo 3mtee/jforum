@@ -216,6 +216,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+        <dependency>
+            <groupId>co.uk.smartkey</groupId>
+            <artifactId>jforumsecuresso</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 	</dependencies>
 	<build>
 		<finalName>jforum</finalName>

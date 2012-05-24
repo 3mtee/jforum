@@ -114,9 +114,9 @@ public class PrivateMessageAction extends Command {
     }
 
     private void putTypes() {
-        this.context.put("NEW", Integer.valueOf(PrivateMessageType.NEW));
-        this.context.put("READ", Integer.valueOf(PrivateMessageType.READ));
-        this.context.put("UNREAD", Integer.valueOf(PrivateMessageType.UNREAD));
+        this.context.put("NEW", PrivateMessageType.NEW);
+        this.context.put("READ", PrivateMessageType.READ);
+        this.context.put("UNREAD", PrivateMessageType.UNREAD);
     }
 
     public void send() {
@@ -148,7 +148,7 @@ public class PrivateMessageAction extends Command {
             User recipient = DataAccessDriver.getInstance().newUserDAO().selectById(userId);
 
             this.context.put("pmRecipient", recipient);
-            this.context.put("toUserId", Integer.valueOf(recipient.getId()));
+            this.context.put("toUserId", recipient.getId());
             this.context.put("toUsername", recipient.getUsername());
             this.context.put("pageTitle", I18n.getMessage("PrivateMessage.title")
                     + " " + I18n.getMessage("PrivateMessage.to")
