@@ -94,14 +94,15 @@ public class PrivateMessageREST extends RESTCommand {
             final Post post = PostCommon.fillPostFromRequest();
             AttachmentCommon attachments = new AttachmentCommon(this.request, 0);
             attachments.preProcess();
+            final String email = requiredRequestParameter("email");
+            User fromUser = userDao.findByEmail(email);
 
             for (User user : users) {
                 PrivateMessage pm = new PrivateMessage();
                 pm.setPost(post);
 
                 // Sender
-                User fromUser = new User();
-                fromUser.setId(SessionFacade.getUserSession().getUserId());
+
                 pm.setFromUser(fromUser);
 
                 pm.setToUser(user);
